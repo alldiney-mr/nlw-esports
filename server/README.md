@@ -11,7 +11,7 @@ bannerUrl
 ### Ad
 
 id
-gasseId
+gameId
 name
 yearsPlaying
 discord
