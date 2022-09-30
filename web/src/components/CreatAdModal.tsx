@@ -1,6 +1,9 @@
 import { Check, GameController } from "phosphor-react";
+
 import * as Dialog from "@radix-ui/react-dialog"
 import * as Checkbox from "@radix-ui/react-checkbox"
+import * as ToggleGroup from '@radix-ui/react-toggle-group';
+
 import { Input } from "./Form/Input";
 import { useEffect, useState } from "react";
 
@@ -11,6 +14,9 @@ interface Game {
 
 export function CreatAdModal() {
    const [games, setGames] = useState<Game[]>([])
+   const [weekDays, setWeekDays] = useState<string[]>([])
+
+   console.log(weekDays)
 
    useEffect(() => {
       fetch('http://localhost:3333/games')
@@ -30,11 +36,11 @@ export function CreatAdModal() {
          <form className="mt-8 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
                <label htmlFor="game" className="font-semibold">Qual o game?</label>
-               <select className="bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none" id="game">
-                  <option disabled selected value="">Selecione o game que deseja jogar</option>
+               <select defaultValue="" className="bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none" id="game">
+                  <option disabled value="">Selecione o game que deseja jogar</option>
 
                   { games.map(game => {
-                     return  <option key={game.id} value={game.id}>{game.title}</option>
+                     return <option key={game.id} value={game.id}>{game.title}</option>
                   }) }
                </select>
             </div>
@@ -60,35 +66,35 @@ export function CreatAdModal() {
                <div className="flex flex-col gap-2">
                   <label htmlFor="weekDays">Quando costuma jogar?</label>
 
-                  <div className="grid grid-cols-4 gap-2">
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Domingo">D</button>
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Segunda">S</button>
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Terça">T</button>
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Quarta">Q</button>
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Quinta">Q</button>
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Sexta">S</button>
-                     <button className="w-8 h-8 rounded bg-zinc-900" title="Sábado">S</button>
-                  </div>
+                  <ToggleGroup.Root value={weekDays} type="multiple" className="grid grid-cols-4 gap-2" onValueChange={setWeekDays}>
+                     <ToggleGroup.Item value="0" className={`w-8 h-8 rounded ${weekDays.includes('0') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Domingo">D</ToggleGroup.Item>
+                     <ToggleGroup.Item value="1" className={`w-8 h-8 rounded ${weekDays.includes('1') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Segunda">S</ToggleGroup.Item>
+                     <ToggleGroup.Item value="2" className={`w-8 h-8 rounded ${weekDays.includes('2') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Terça">T</ToggleGroup.Item>
+                     <ToggleGroup.Item value="3" className={`w-8 h-8 rounded ${weekDays.includes('3') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Quarta">Q</ToggleGroup.Item>
+                     <ToggleGroup.Item value="4" className={`w-8 h-8 rounded ${weekDays.includes('4') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Quinta">Q</ToggleGroup.Item>
+                     <ToggleGroup.Item value="5" className={`w-8 h-8 rounded ${weekDays.includes('5') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Sexta">S</ToggleGroup.Item>
+                     <ToggleGroup.Item value="6" className={`w-8 h-8 rounded ${weekDays.includes('6') ? 'bg-violet-500': 'bg-zinc-900'} `} title="Sábado">S</ToggleGroup.Item>
+                  </ToggleGroup.Root>
                </div>
 
                <div className="flex flex-col gap-2 flex-1">
                   <label htmlFor="hourStart">Qual horário do dia?</label>
                   
-                  <div className="grid grid-cols-2 gap-2">                      
+                  <label className="grid grid-cols-2 gap-2">                      
                      <Input id="hourStart" type="time" placeholder="De" />
                      <Input id="hourEnd" type="time" placeholder="Até" />
-                  </div>
+                  </label>
                </div>
             </div>
 
-            <div className="mt-2 flex items-center gap-2 text-sm">
+            <label className="mt-2 flex items-center gap-2 text-sm">
                <Checkbox.Root className="w-6 h-6 p-1 rounded bg-zinc-900">
                   <Checkbox.Indicator>
                      <Check className="w-4 h-4 text-emerald-400" />
                   </Checkbox.Indicator>
                </Checkbox.Root>
                Costumo me concectar ao chat de voz
-            </div>
+            </label>
 
             <footer className="mt-4 flex justify-end gap-4">
                <Dialog.DialogClose type="button" className="bg-zinc-500 px-5 h-12 rounded-md font-semibold hover:bg-zinc-600">Cancelar</Dialog.DialogClose>
